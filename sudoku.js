@@ -16,6 +16,10 @@ var sets; //=[generateNumbers(), generateNumbers(), generateNumbers(),generateNu
 //  to the correct difficulty. Easy game by default.
 var difficulty=0;
 
+var currentFocusElementId = "";
+var currentFocusElementIValue = -1;
+var currentFocusElementJValue = -1;
+
 function setEasy(){
     difficulty = 0;
     resetGame();
@@ -59,6 +63,37 @@ window.onload = function(){
     
     initalizeHTMLGrid();
     resetGame();
+    document.onkeydown = keyDown;
+}
+function changeSquareValue(valueToChangeTo){
+	var canvasElement = document.getElementById(currentFocusElementId);
+	var context = canvasElement.getContext("2d");
+	var value = valueToChangeTo - 48;
+	var gridVal = grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
+	if(value >= 1 && value <= 9 && gridVal === 0){
+		context.fillStyle = "#000000";
+		context.font = "20px Arial";
+		context.fillText(value,5,20);
+	}
+}
+function keyDown(e){
+	if(currentFocusElementId === ""){
+		return;
+	}
+	changeSquareValue(e.keyCode);
+}
+
+function doMouseDown(event){
+	var canvasId = event.currentTarget.id;
+	currentFocusElementIValue = canvasId[canvasId.length - 1];
+	currentFocusElementJValue = canvasId[canvasId.length - 2];
+	var canvasObject = document.getElementById(canvasId);
+	canvasObject.style.background = "#FF0000";
+	if(canvasId !== currentFocusElementId && currentFocusElementId !== ""){
+		var previousCanvasObject = document.getElementById(currentFocusElementId);
+		previousCanvasObject.style.background = "#000000";
+	}
+	currentFocusElementId = canvasId;
 }
 
 function initalizeHTMLGrid(){
@@ -69,6 +104,7 @@ function initalizeHTMLGrid(){
             c.setAttribute('width',30);
             c.setAttribute('height',30);
             c.className=i;
+	    c.addEventListener("mousedown", doMouseDown, false);
             document.getElementById("box"+j).appendChild(c);
             var ctx=c.getContext('2d');								//Get the context - needed for HTML5 manipulation
             ctx.fillStyle='#FFFFFF';								//Make it blank to begin with
