@@ -30,15 +30,16 @@ function setHard(){
 
 function resetGame(){
     //todo
+    console.log("reset button");
 }
 
 function setEventHandlers(){
     //Set buttons to call difficulty functions
     console.log("In setEventHandlers");
-    document.getElementById("easyButton").addEventListener("onclick", setEasy, true);
-    document.getElementById("mediumButton").addEventListener("onclick", setMedium, true);
-    document.getElementById("hardButton").addEventListener("onclick", setHard, true);
-    document.getElementById("resetButton").addEventListener("onclick", resetGame, true);
+    document.getElementById("easyButton").addEventListener('click', setEasy, false);
+    document.getElementById("mediumButton").addEventListener("click", setMedium, true);
+    document.getElementById("hardButton").addEventListener("click", setHard, true);
+    document.getElementById("resetButton").addEventListener("click", resetGame, true);
 }
 
 //adds html5 canvases, generates a grid, and displays it on the load of the window
