@@ -26,8 +26,9 @@ function setHard(){
 }
 
 function resetGame(){
-    //todo
     console.log("reset button");
+    calculateGrid();
+    styleGridElements();
 }
 
 function setEventHandlers(){
@@ -44,9 +45,9 @@ window.onload = function(){
     console.log("onLoad()");
 
     setEventHandlers();
-    //initalizeHTMLGrid();
-    //calculateGrid();
-    //styleGridElements();
+    initalizeHTMLGrid();
+    calculateGrid();
+    styleGridElements();
 }
 
 function initalizeHTMLGrid(){
