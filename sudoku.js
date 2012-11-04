@@ -177,6 +177,8 @@ function resetRow(row){
         var currentSquare=grid[currentSquareIndex-1];
         currentColumn[row]=0;
         gridColumns[i]=currentColumn;
+        //When generating the game, the follow line occasionally generates the error:
+        //  Uncaught TypeError: Cannot set property '0' of undefined
         currentRow[i]=0;
         var currentPrevNumbers=prevNumbers[Math.floor(i/3)];
         currentPrevNumbers[i%3]=currentSquare[(row%3)*3+i%3];
