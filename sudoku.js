@@ -29,7 +29,6 @@ function setHard(){
 }
 
 function resetGame(){
-    console.log("reset button");
     calculateGrid();
     removeNumbers();
     styleGridElements();
@@ -56,9 +55,7 @@ window.onload = function(){
     //gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     
     initalizeHTMLGrid();
-    calculateGrid();
-    styleGridElements();
-    //removeNumbers();
+    resetGame();
 }
 
 function initalizeHTMLGrid(){
@@ -247,9 +244,7 @@ function removeNumbers(){
         //  Random number will be between 0-8
         var randomNumber1 = Math.floor(Math.random()*9);
         var randomNumber2 = Math.floor(Math.random()*9);
-        var currentElement = grid[randomNumber1][randomNumber2];
-        if( currentElement != 0 ){
-            console.log(currentElement + " is now a 0 and " + i + " elements have been replaced");
+        if( grid[randomNumber1][randomNumber2] != 0 ){
             grid[randomNumber1][randomNumber2] = 0;
         }
         else{
