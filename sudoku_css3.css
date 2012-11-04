@@ -1,6 +1,12 @@
 body{
 	background-color:#D9F0FF;
 }
+h1{
+    //background-color:red;
+    //transform:rotate(-30deg);
+    //-webkit-transform:rotate(-30deg);
+    
+}
 #sudoku_background{
 	/*/margin-top:30px;/*/
 	position:relative;
@@ -23,3 +29,43 @@ body{
 	line-height:.8em;
 }
 
+#controls button{
+    //background-color:black;
+    //text-color:white;
+    //border:2px solid;
+    width:7em;
+    height:3em;
+    transition: width 1s, height 1s;
+    -webkit-transition: width 1s, height 1s;
+    border-radius:15px;
+    box-shadow: 10px 10px 5px #888888;
+    font-weight:bold;
+}
+
+#hoverEffect button:hover{
+    width:9em;
+}
+
+#newGame,
+#newGame ul{
+    list-style: none;
+}
+
+#newGame li {
+    display:block;
+    text-decoration:none;
+}
+
+#newGame ul {
+    position:absolute;
+    display:none;
+    z-index:999;
+}
+
+#newGame li:hover ul {
+    display: block;
+}
+
+#newGame > li {
+    font-weight: bold;
+}
