@@ -28,12 +28,17 @@ function setHard(){
     console.log("setHard()");
 }
 
+function resetGame(){
+    //todo
+}
+
 function setEventHandlers(){
     //Set buttons to call difficulty functions
     console.log("In setEventHandlers");
     document.getElementById("easyButton").addEventListener("onclick", setEasy, true);
     document.getElementById("mediumButton").addEventListener("onclick", setMedium, true);
     document.getElementById("hardButton").addEventListener("onclick", setHard, true);
+    document.getElementById("resetButton").addEventListener("onclick", resetGame, true);
 }
 
 //adds html5 canvases, generates a grid, and displays it on the load of the window
@@ -41,9 +46,9 @@ window.onload = function(){
     console.log("onLoad()");
 
     setEventHandlers();
-    initalizeHTMLGrid();
-    calculateGrid();
-    styleGridElements();
+    //initalizeHTMLGrid();
+    //calculateGrid();
+    //styleGridElements();
 }
 
 function initalizeHTMLGrid(){
