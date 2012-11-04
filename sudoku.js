@@ -14,18 +14,15 @@ var sets=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumber
 var difficulty=0;
 
 function setEasy(){
-    //difficulty = 0;
-    console.log("setEasy()");
+    difficulty = 0;
 }
 
 function setMedium(){
-    //difficulty = 1;
-    console.log("setMedium()");
+    difficulty = 1;
 }
 
 function setHard(){
-    //difficulty = 2;
-    console.log("setHard()");
+    difficulty = 2;
 }
 
 function resetGame(){
