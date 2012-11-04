@@ -161,7 +161,7 @@ function styleGridElements(){
             ntx.font = "20px Arial";
             //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
             if( currentElement != 0 ){
-                ntx.fillText(currentElement,5,20);
+                ntx.fillText(currentElement,8,22);
             }
             ntx.fillStyle='#FFFFFF';
         }
