@@ -41,6 +41,12 @@ window.onload = function(){
     console.log("onLoad()");
 
     setEventHandlers();
+    initalizeHTMLGrid();
+    calculateGrid();
+    styleGridElements();
+}
+
+function initalizeHTMLGrid(){
     for(j=0;j<9;j++){
         for(i=0; i<9; i++){
             var c=document.createElement("canvas");
@@ -52,21 +58,6 @@ window.onload = function(){
             var ctx=c.getContext('2d');								//Get the context - needed for HTML5 manipulation
             ctx.fillStyle='#FFFFFF';								//Make it blank to begin with
             ctx.fillRect(0,0,28,28);							//Shape it
-        }
-    }
-    calculateGrid();
-    for(j=0; j<9; j++){
-        for(i=0;i<9;i++){
-            var currentSquare=grid[j];
-            var currentElement=currentSquare[i];
-            var c=document.getElementById("newcanvas"+(j+1)+(i+1));
-            var ntx=c.getContext('2d');
-            ntx.fillStyle='#FFFFFF';
-            ntx.fillRect(0,0,28,28);
-            ntx.fillStyle='#000000';
-            ntx.font = "20px Arial";
-            ntx.fillText(currentElement,5,20);
-            ntx.fillStyle='#FFFFFF';
         }
     }
 }
@@ -123,6 +114,23 @@ function calculateGrid(){
             grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
             gridRows[i][j]=currentNum;
             gridColumns[j][i]=currentNum;
+        }
+    }
+}
+
+function styleGridElements(){
+    for(j=0; j<9; j++){
+        for(i=0;i<9;i++){
+            var currentSquare=grid[j];
+            var currentElement=currentSquare[i];
+            var c=document.getElementById("newcanvas"+(j+1)+(i+1));
+            var ntx=c.getContext('2d');
+            ntx.fillStyle='#FFFFFF';
+            ntx.fillRect(0,0,28,28);
+            ntx.fillStyle='#000000';
+            ntx.font = "20px Arial";
+            ntx.fillText(currentElement,5,20);
+            ntx.fillStyle='#FFFFFF';
         }
     }
 }
