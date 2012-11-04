@@ -1,12 +1,15 @@
 //array to hold array of squares. each index is an array of 9x9 sudoku squares
 var grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+
 //array to hold absolute row by column sudoku grid
 var gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+
 //array to hold absolute column by row sudoku grid
 var gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
 //array to hold sets of avaiable numbers for each square. sets[i] is the set of numbers avaiable to be added to
+
 //each 9x9 sudoku square, whose number is i+1;
-var sets=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
+var sets; //=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
 
 //Difficultly selected by user. 0=Easy, 1=Medium, 2=Hard
 //  Set when user selects button, then used to reset the board
@@ -28,6 +31,7 @@ function setHard(){
 function resetGame(){
     console.log("reset button");
     calculateGrid();
+    removeNumbers();
     styleGridElements();
 }
 
@@ -45,9 +49,16 @@ window.onload = function(){
     console.log("onLoad()");
 
     setEventHandlers();
+    
+    //Initalize array for holding the arrays. Documented at beginning of script.
+    //grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+    //gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+    //gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+    
     initalizeHTMLGrid();
     calculateGrid();
     styleGridElements();
+    //removeNumbers();
 }
 
 function initalizeHTMLGrid(){
@@ -104,6 +115,7 @@ function calculateGrid(){
                 //rerun calculation if have tried for a long time
                 if(counter>500000)
                 {
+                    console.log("Rerunning calculation");
                     calculateGrid();
                 }
             }
@@ -133,7 +145,10 @@ function styleGridElements(){
             ntx.fillRect(0,0,28,28);
             ntx.fillStyle='#000000';
             ntx.font = "20px Arial";
-            ntx.fillText(currentElement,5,20);
+            //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
+            if( currentElement != 1 ){
+                ntx.fillText(currentElement,5,20);
+            }
             ntx.fillStyle='#FFFFFF';
         }
     }
@@ -141,17 +156,17 @@ function styleGridElements(){
 
 //check if there is a conflict in a 9x9 square
 function checkConflictSquare(currentSquare, currentSelectedNumber){
-    return grid[currentSquare-1].indexOf(currentSelectedNumber)>-1;
+    return grid[currentSquare-1].indexOf(currentSelectedNumber) > -1;
 }
 
 //check if there is a conflict in a row
 function checkConflictRow(currentRow,currentSelectedNumber){
-    return gridRows[currentRow].indexOf(currentSelectedNumber)>-1;
+    return gridRows[currentRow].indexOf(currentSelectedNumber) > -1;
 }
 
 //check if there is a conflict in a column
 function checkCurrentColumn(currentColumn, currentSelectedNumber){
-    return gridColumns[currentColumn].indexOf(currentSelectedNumber)>-1;
+    return gridColumns[currentColumn].indexOf(currentSelectedNumber) > -1;
 }
 
 //resets a sudoku row to zeros and replenishes the possible numbers
@@ -227,9 +242,20 @@ function removeNumbers(){
         remove = 50;
     }
 
-    //for( i=0, i<remove; i++ ){
+    for(i=0; i<remove; i++ ){
         //randomly select and element and remove it
-    //}
+        //  Random number will be between 0-8
+        var randomNumber1 = Math.floor(Math.random()*9);
+        var randomNumber2 = Math.floor(Math.random()*9);
+        var currentElement = grid[randomNumber1][randomNumber2];
+        if( currentElement != 0 ){
+            console.log(currentElement + " is now a 0 and " + i + " elements have been replaced");
+            currentElement = 0;
+        }
+        else{
+            i--;
+        }
+    }
 }
 
 function StopWatch(){
