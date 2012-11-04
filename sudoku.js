@@ -11,26 +11,36 @@ var sets=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumber
 //Difficultly selected by user. 0=Easy, 1=Medium, 2=Hard
 //  Set when user selects button, then used to reset the board
 //  to the correct difficulty. Easy game by default.
-var difficulty = 0;
+var difficulty=0;
 
 function setEasy(){
-    difficulty = 0;
+    //difficulty = 0;
+    console.log("setEasy()");
 }
 
 function setMedium(){
-    difficulty = 1;
+    //difficulty = 1;
+    console.log("setMedium()");
 }
 
 function setHard(){
-    difficulty = 2;
+    //difficulty = 2;
+    console.log("setHard()");
 }
 
 function setEventHandlers(){
     //Set buttons to call difficulty functions
+    console.log("In setEventHandlers");
+    document.getElementById("easyButton").addEventListener("onclick", setEasy, true);
+    document.getElementById("mediumButton").addEventListener("onclick", setMedium, true);
+    document.getElementById("hardButton").addEventListener("onclick", setHard, true);
 }
 
 //adds html5 canvases, generates a grid, and displays it on the load of the window
 window.onload = function(){
+    console.log("onLoad()");
+
+    setEventHandlers();
     for(j=0;j<9;j++){
         for(i=0; i<9; i++){
             var c=document.createElement("canvas");
@@ -205,9 +215,9 @@ function removeNumbers(){
         remove = 50;
     }
 
-    for( i=0, i<remove; i++ ){
+    //for( i=0, i<remove; i++ ){
         //randomly select and element and remove it
-    }
+    //}
 }
 
 function StopWatch(){
