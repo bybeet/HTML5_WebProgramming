@@ -5,8 +5,13 @@ h1{
     //background-color:red;
     //transform:rotate(-30deg);
     //-webkit-transform:rotate(-30deg);
+}
+
+canvas:hover {
+    //background-color: #D9F0FF;
     
 }
+
 #sudoku_background{
 	/*/margin-top:30px;/*/
 	position:relative;
@@ -44,6 +49,8 @@ h1{
 
 #hoverEffect button:hover{
     width:9em;
+    background-color: black;
+    color: white;
 }
 
 #newGame,

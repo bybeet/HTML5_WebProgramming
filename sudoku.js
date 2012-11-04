@@ -11,6 +11,9 @@ var gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array()
 //each 9x9 sudoku square, whose number is i+1;
 var sets; //=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
 
+//Stopwatch object, can be started with stopWatch.start(), stopped with stopWatch.stop()
+var stopWatch = new StopWatch();
+
 //Difficultly selected by user. 0=Easy, 1=Medium, 2=Hard
 //  Set when user selects button, then used to reset the board
 //  to the correct difficulty. Easy game by default.
@@ -35,10 +38,13 @@ function setHard(){
     resetGame();
 }
 
+//Recalculates numbers, randomly removes numbers based on difficults, displays numbers
+//on the canvas, and starts the stopwatch.
 function resetGame(){
     calculateGrid();
     removeNumbers();
     styleGridElements();
+    stopWatch.start();
 }
 
 function setEventHandlers(){
@@ -50,17 +56,11 @@ function setEventHandlers(){
     //document.getElementById("resetButton").addEventListener("click", resetGame, true);
 }
 
-//adds html5 canvases, generates a grid, and displays it on the load of the window
+//Sets handlers for new game buttons, initializes the canvas grid, and
+//sets up the game.
 window.onload = function(){
-    console.log("onLoad()");
-
     setEventHandlers();
-    
-    //Initalize array for holding the arrays. Documented at beginning of script.
-    //grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
-    //gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
-    //gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
-    
+
     initalizeHTMLGrid();
     resetGame();
     document.onkeydown = keyDown;
@@ -197,7 +197,7 @@ function styleGridElements(){
             ntx.font = "20px Arial";
             //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
             if( currentElement != 0 ){
-                ntx.fillText(currentElement,5,20);
+                ntx.fillText(currentElement,8,22);
             }
             ntx.fillStyle='#FFFFFF';
         }
