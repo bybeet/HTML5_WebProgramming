@@ -18,14 +18,17 @@ var difficulty=0;
 
 function setEasy(){
     difficulty = 0;
+    resetGame();
 }
 
 function setMedium(){
     difficulty = 1;
+    resetGame();
 }
 
 function setHard(){
     difficulty = 2;
+    resetGame();
 }
 
 function resetGame(){
@@ -40,7 +43,7 @@ function setEventHandlers(){
     document.getElementById("easyButton").addEventListener('click', setEasy, false);
     document.getElementById("mediumButton").addEventListener("click", setMedium, true);
     document.getElementById("hardButton").addEventListener("click", setHard, true);
-    document.getElementById("resetButton").addEventListener("click", resetGame, true);
+    //document.getElementById("resetButton").addEventListener("click", resetGame, true);
 }
 
 //adds html5 canvases, generates a grid, and displays it on the load of the window
