@@ -8,6 +8,27 @@ var gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array()
 //each 9x9 sudoku square, whose number is i+1;
 var sets=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
 
+//Difficultly selected by user. 0=Easy, 1=Medium, 2=Hard
+//  Set when user selects button, then used to reset the board
+//  to the correct difficulty. Easy game by default.
+var difficulty = 0;
+
+function setEasy(){
+    difficulty = 0;
+}
+
+function setMedium(){
+    difficulty = 1;
+}
+
+function setHard(){
+    difficulty = 2;
+}
+
+function setEventHandlers(){
+    //Set buttons to call difficulty functions
+}
+
 //adds html5 canvases, generates a grid, and displays it on the load of the window
 window.onload = function(){
     for(j=0;j<9;j++){
@@ -168,6 +189,25 @@ function generateNumbers(){
         set[i]=number;
     }
     return set;
+}
+
+//Remove the elements from the board.
+//  Based on the difficulty variable.
+function removeNumbers(){
+    var remove = 0;
+    if( difficulty == 0 ){
+        remove = 20;
+    }
+    else if( difficulty == 1 ){
+        remove = 35;
+    }
+    else if( difficulty == 2 ){
+        remove = 50;
+    }
+
+    for( i=0, i<remove; i++ ){
+        //randomly select and element and remove it
+    }
 }
 
 function StopWatch(){
