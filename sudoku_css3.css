@@ -49,6 +49,8 @@ canvas:hover {
 
 #hoverEffect button:hover{
     width:9em;
+    background-color: black;
+    color: white;
 }
 
 #newGame,
