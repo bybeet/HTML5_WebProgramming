@@ -79,6 +79,7 @@ function initalizeHTMLGrid(){
 
 //function fills the global arrays of grid, gridRows and gridColumns
 function calculateGrid(){
+	var rerun=false;
     grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
@@ -116,22 +117,35 @@ function calculateGrid(){
                 if(counter>500000)
                 {
                     console.log("Rerunning calculation");
-                    calculateGrid();
+                    rerun=true;
+					break;
                 }
             }
-            var currentNum=currentSet[index];
-            if(currentNum==0){
-                j--;
-                continue;
-            }
-            currentSet[index]=0;
-            var squareIndexCol=j%3;
-            var squareIndexRow=i%3;
-            grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
-            gridRows[i][j]=currentNum;
-            gridColumns[j][i]=currentNum;
+			if(!rerun){
+				var currentNum=currentSet[index];
+				if(currentNum==0){
+					j--;
+					continue;
+				}
+				currentSet[index]=0;
+				var squareIndexCol=j%3;
+				var squareIndexRow=i%3;
+				grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
+				gridRows[i][j]=currentNum;
+				gridColumns[j][i]=currentNum;
+			}
+			else
+			{
+				break;
+			}
         }
+		if(rerun){
+			break;
+		}
     }
+	if(rerun){
+		calculateGrid();
+	}	
 }
 
 function styleGridElements(){
