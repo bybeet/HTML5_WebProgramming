@@ -146,7 +146,7 @@ function styleGridElements(){
             ntx.fillStyle='#000000';
             ntx.font = "20px Arial";
             //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
-            if( currentElement != 1 ){
+            if( currentElement != 0 ){
                 ntx.fillText(currentElement,5,20);
             }
             ntx.fillStyle='#FFFFFF';
@@ -250,7 +250,7 @@ function removeNumbers(){
         var currentElement = grid[randomNumber1][randomNumber2];
         if( currentElement != 0 ){
             console.log(currentElement + " is now a 0 and " + i + " elements have been replaced");
-            currentElement = 0;
+            grid[randomNumber1][randomNumber2] = 0;
         }
         else{
             i--;
