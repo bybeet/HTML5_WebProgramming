@@ -1,6 +1,9 @@
 //array to hold array of squares. each index is an array of 9x9 sudoku squares
 var grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
 
+//array to hold array of squares. each index is an array of 9x9 sudoku squares
+var valuesEditable=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+
 //array to hold absolute row by column sudoku grid
 var gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
 
@@ -11,6 +14,8 @@ var gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array()
 //each 9x9 sudoku square, whose number is i+1;
 var sets; //=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
 
+var idsInput;
+var numBoxesInputted = 0;
 //Stopwatch object, can be started with stopWatch.start(), stopped with stopWatch.stop()
 var stopWatch = new StopWatch();
 
@@ -41,6 +46,7 @@ function setHard(){
 //Recalculates numbers, randomly removes numbers based on difficults, displays numbers
 //on the canvas, and starts the stopwatch.
 function resetGame(){
+    idsInput = new Object();
     calculateGrid();
     removeNumbers();
     styleGridElements();
@@ -70,10 +76,30 @@ function changeSquareValue(valueToChangeTo){
 	var context = canvasElement.getContext("2d");
 	var value = valueToChangeTo - 48;
 	var gridVal = grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
-	if(value >= 1 && value <= 9 && gridVal === 0){
+	var editable = valuesEditable[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
+	var completedGame = false;
+	if(idsInput[currentFocusElementId] === undefined && editable){
+		idsInput[currentFocusElementId] = true;
+		numBoxesInputted++;
+		if((numBoxesInputted === 20 && difficulty === 0) || (numBoxesInputted === 35 && difficulty === 1)
+			|| (numBoxesInputted === 50 && difficulty === 2)){
+			completedGame = true;
+		}
+	}
+	if(value >= 1 && value <= 9 && editable){
+		context.fillStyle='#FFFFFF';
+                context.fillRect(0,0,28,28);
 		context.fillStyle = "#000000";
 		context.font = "20px Arial";
 		context.fillText(value,5,20);
+
+		gridRows[(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)][((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)] = value;
+
+		gridColumns[((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)][(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)] = value;			
+		grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1] = value;
+	}
+	if(completedGame){
+		checkGameSuccess();
 	}
 }
 function keyDown(e){
@@ -117,6 +143,7 @@ function initalizeHTMLGrid(){
 function calculateGrid(){
 	var rerun=false;
     grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
+    valuesEditable=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     gridColumns=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     sets=[generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers(),generateNumbers(), generateNumbers(), generateNumbers()];
@@ -167,6 +194,7 @@ function calculateGrid(){
 				var squareIndexCol=j%3;
 				var squareIndexRow=i%3;
 				grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
+				valuesEditable[currentSquare-1][squareIndexRow*3+squareIndexCol]=false;
 				gridRows[i][j]=currentNum;
 				gridColumns[j][i]=currentNum;
 			}
@@ -202,6 +230,76 @@ function styleGridElements(){
             ntx.fillStyle='#FFFFFF';
         }
     }
+}
+
+
+function checkGameSuccess(){
+	var currentSquare = 0;
+	for(var i = 0; i < 9; i++){
+		currentSquare=1+Math.floor(i/3)*3;
+		for(var j = 0; j < 9; j++){
+			currentSquare = 1 + Math.floor(j/3) + (Math.floor(i/3) * 3);
+			currentSquareIndex = (j % 3) + (3 * (i % 3))
+			var squareIndexCol=j%3;
+			var squareIndexRow=i%3;
+			if(checkRow(i, gridRows[i][j], j) && checkColumn(j, gridRows[i][j], i) 
+				&& checkSquare(currentSquare ,gridRows[i][j], currentSquareIndex)){
+				continue;
+			}else{
+				alert("LOSER");
+				return;
+			}
+		}
+	}
+	alert("WINNER");
+}
+
+//check if there is a conflict in a 9x9 square not including a certain index
+function checkSquare(currentSquare, currentSelectedNumber, indexOfValue){
+    var afterIndex = grid[currentSquare-1].indexOf(currentSelectedNumber, indexOfValue + 1);
+    var beforeIndex = grid[currentSquare-1].indexOf(currentSelectedNumber);
+    if(beforeIndex > -1 && beforeIndex < indexOfValue){
+	return false;
+    }else if(beforeIndex === indexOfValue){
+	if(afterIndex > -1){
+		return false;
+	}else{
+		return true;
+	}
+    }
+    return true;
+}
+
+//check if there is a conflict in a row
+function checkRow(currentRow,currentSelectedNumber, indexOfValue){
+    var afterIndex = gridRows[currentRow].indexOf(currentSelectedNumber, indexOfValue + 1);
+    var beforeIndex = gridRows[currentRow].indexOf(currentSelectedNumber);
+    if(beforeIndex > -1 && beforeIndex < indexOfValue){
+	return false;
+    }else if(beforeIndex === indexOfValue){
+	if(afterIndex > -1){
+		return false;
+	}else{
+		return true;
+	}
+    }
+    return true;
+}
+
+//check if there is a conflict in a column
+function checkColumn(currentColumn, currentSelectedNumber, indexOfValue){
+    var afterIndex = gridColumns[currentColumn].indexOf(currentSelectedNumber, indexOfValue + 1);
+    var beforeIndex = gridColumns[currentColumn].indexOf(currentSelectedNumber);
+    if(beforeIndex > -1 && beforeIndex < indexOfValue){
+	return false;
+    }else if(beforeIndex === indexOfValue){
+	if(afterIndex > -1){
+		return false;
+	}else{
+		return true;
+	}
+    }
+    return true;
 }
 
 //check if there is a conflict in a 9x9 square
@@ -301,6 +399,7 @@ function removeNumbers(){
         var randomNumber2 = Math.floor(Math.random()*9);
         if( grid[randomNumber1][randomNumber2] != 0 ){
             grid[randomNumber1][randomNumber2] = 0;
+	    valuesEditable[randomNumber1][randomNumber2] = true;
         }
         else{
             i--;
