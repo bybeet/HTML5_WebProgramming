@@ -1,3 +1,7 @@
+//Bug: Game only checks for a winning state on the first initialization, if the
+//game is reset through the new game button a winning/losing game is not checked
+//for.
+
 //array to hold array of squares. each index is an array of 9x9 sudoku squares
 var grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
 
@@ -23,6 +27,9 @@ var stopWatch = new StopWatch();
 //  Set when user selects button, then used to reset the board
 //  to the correct difficulty. Easy game by default.
 var difficulty=0;
+var EASY_DIFFICULTY = 5;
+var MEDIUM_DIFFICULTY = 35;
+var HARD_DIFFICULTY = 50;
 
 var currentFocusElementId = "";
 var currentFocusElementIValue = -1;
@@ -81,8 +88,8 @@ function changeSquareValue(valueToChangeTo){
 	if(idsInput[currentFocusElementId] === undefined && editable){
 		idsInput[currentFocusElementId] = true;
 		numBoxesInputted++;
-		if((numBoxesInputted === 20 && difficulty === 0) || (numBoxesInputted === 35 && difficulty === 1)
-			|| (numBoxesInputted === 50 && difficulty === 2)){
+		if((numBoxesInputted === EASY_DIFFICULTY && difficulty === 0) || (numBoxesInputted === MEDIUM_DIFFICULTY && difficulty === 1)
+			|| (numBoxesInputted === HARD_DIFFICULTY && difficulty === 2)){
 			completedGame = true;
 		}
 	}
@@ -236,7 +243,10 @@ function styleGridElements(){
 }
 
 function addCheckAnswerButton(){
-    
+   var btn = document.createElement("button");
+   btn.setAttribute('value', 'Recheck Answer');
+   btn.setAttribute('id', "recheck");
+   document.getElementById('id').addEventListener('click', checkGameSuccess, true);
 }
 
 function checkGameSuccess(){
@@ -253,12 +263,15 @@ function checkGameSuccess(){
 				continue;
 			}else{
 				alert("LOSER");
-                addCheckAnswerButton();
+                if( document.getElementById('recheck') == null ){
+                    addCheckAnswerButton();
+                }
 				return;
 			}
 		}
 	}
-	alert("WINNER");
+    stopWatch.stop();
+	alert("WINNER\nTime: " + stopWatch.duration() + " time units");
 }
 
 //check if there is a conflict in a 9x9 square not including a certain index
@@ -390,13 +403,13 @@ function generateNumbers(){
 function removeNumbers(){
     var remove = 0;
     if( difficulty == 0 ){
-        remove = 20;
+        remove = EASY_DIFFICULTY;
     }
     else if( difficulty == 1 ){
-        remove = 35;
+        remove = MEDIUM_DIFFICULTY;
     }
     else if( difficulty == 2 ){
-        remove = 50;
+        remove = HARD_DIFFICULTY;
     }
 
     for(i=0; i<remove; i++ ){
