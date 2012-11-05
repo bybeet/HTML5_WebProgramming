@@ -87,11 +87,11 @@ function changeSquareValue(valueToChangeTo){
 		}
 	}
 	if(value >= 1 && value <= 9 && editable){
-		context.fillStyle='#FFFFFF';
+		context.fillStyle='#CCCCCC';
                 context.fillRect(0,0,28,28);
 		context.fillStyle = "#000000";
 		context.font = "20px Arial";
-		context.fillText(value,5,20);
+		context.fillText(value,8,22);
 
 		gridRows[(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)][((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)] = value;
 
@@ -227,11 +227,17 @@ function styleGridElements(){
             if( currentElement != 0 ){
                 ntx.fillText(currentElement,8,22);
             }
-            ntx.fillStyle='#FFFFFF';
+            else{
+                ntx.fillStyle='#CCCCCC';
+                ntx.fillRect(0,0,28,28);
+            }
         }
     }
 }
 
+function addCheckAnswerButton(){
+    
+}
 
 function checkGameSuccess(){
 	var currentSquare = 0;
@@ -247,6 +253,7 @@ function checkGameSuccess(){
 				continue;
 			}else{
 				alert("LOSER");
+                addCheckAnswerButton();
 				return;
 			}
 		}
