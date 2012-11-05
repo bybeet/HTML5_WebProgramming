@@ -32,6 +32,7 @@ var MEDIUM_DIFFICULTY = 35;
 var HARD_DIFFICULTY = 50;
 
 var currentFocusElementId = "";
+var currentFocusElementBGColor = "";
 var currentFocusElementIValue = -1;
 var currentFocusElementJValue = -1;
 
@@ -58,6 +59,8 @@ function resetGame(){
     removeNumbers();
     styleGridElements();
     stopWatch.start();
+    currentFocusElementId = "";
+    currentFocusElementBGColor = "";
 }
 
 function setEventHandlers(){
@@ -92,6 +95,9 @@ function changeSquareValue(valueToChangeTo){
 			|| (numBoxesInputted === HARD_DIFFICULTY && difficulty === 2)){
 			completedGame = true;
 		}
+	}else if(editable && ((numBoxesInputted === 20 && difficulty === 0) || (numBoxesInputted === 35 && difficulty === 1)
+			|| (numBoxesInputted === 50 && difficulty === 2))){
+		completedGame = true;
 	}
 	if(value >= 1 && value <= 9 && editable){
 		context.fillStyle='#CCCCCC';
@@ -121,12 +127,13 @@ function doMouseDown(event){
 	currentFocusElementIValue = canvasId[canvasId.length - 1];
 	currentFocusElementJValue = canvasId[canvasId.length - 2];
 	var canvasObject = document.getElementById(canvasId);
-	canvasObject.style.background = "#FF0000";
 	if(canvasId !== currentFocusElementId && currentFocusElementId !== ""){
 		var previousCanvasObject = document.getElementById(currentFocusElementId);
-		previousCanvasObject.style.background = "#000000";
+		previousCanvasObject.style.background = currentFocusElementBGColor;
 	}
 	currentFocusElementId = canvasId;
+	currentFocusElementBGColor = canvasObject.style.background;
+	canvasObject.style.background = "#FF0000";
 }
 
 function initalizeHTMLGrid(){
@@ -231,7 +238,9 @@ function styleGridElements(){
             ntx.fillStyle='#000000';
             ntx.font = "20px Arial";
             //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
+            c.style.background = "#FFA500";
             if( currentElement != 0 ){
+		c.style.background = "#000000";
                 ntx.fillText(currentElement,8,22);
             }
             else{
