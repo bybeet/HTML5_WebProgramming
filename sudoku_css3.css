@@ -1,15 +1,30 @@
 body{
 	background-color:#D9F0FF;
 }
+
 h1{
-    //background-color:red;
-    //transform:rotate(-30deg);
-    //-webkit-transform:rotate(-30deg);
+    padding-left: 3em;
+    margin-left: 2em;
+    margin-top: 1.5em;
+    border-radius: 15px;
+    background-color: #0F2E4C;
+    transform:rotate(-15deg);
+    -webkit-transform:rotate(-15deg);
+    color: white;
+    text-indent: 0.5em;
+    
 }
 
-canvas:hover {
-    //background-color: #D9F0FF;
-    
+
+#footer {
+    text-indent: 2em;
+    font-size: 1.5em;
+    position: absolute;
+    right: 0px;
+    padding-right: 1em;
+    bottom: 5px;
+    background-color: #0F2E4C;
+    color: white;
 }
 
 #sudoku_background{
@@ -38,6 +53,7 @@ canvas:hover {
     //background-color:black;
     //text-color:white;
     //border:2px solid;
+    margin-left: 6em;
     width:7em;
     height:3em;
     transition: width 1s, height 1s;
@@ -47,9 +63,9 @@ canvas:hover {
     font-weight:bold;
 }
 
-#hoverEffect button:hover{
+#controls li ul li  button:hover{
     width:9em;
-    background-color: black;
+    background-color: #0F2E4C;
     color: white;
 }
 
@@ -75,4 +91,14 @@ canvas:hover {
 
 #newGame > li {
     font-weight: bold;
+}
+
+@keyframes myanim{
+    from (background: red;)
+    to (background: green;)
+}
+
+@-webkit-keyframes myanim{
+    from (background: red;)
+    to (background: green;)
 }

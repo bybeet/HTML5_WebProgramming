@@ -27,7 +27,7 @@ var stopWatch = new StopWatch();
 //  Set when user selects button, then used to reset the board
 //  to the correct difficulty. Easy game by default.
 var difficulty=0;
-var EASY_DIFFICULTY = 5;
+var EASY_DIFFICULTY = 1;
 var MEDIUM_DIFFICULTY = 35;
 var HARD_DIFFICULTY = 50;
 
@@ -61,6 +61,8 @@ function resetGame(){
     stopWatch.start();
     currentFocusElementId = "";
     currentFocusElementBGColor = "";
+    currentFocusElementIValue = -1;
+    currentFocusElementJValue = -1;
 }
 
 function setEventHandlers(){
@@ -70,70 +72,69 @@ function setEventHandlers(){
     document.getElementById("mediumButton").addEventListener("click", setMedium, true);
     document.getElementById("hardButton").addEventListener("click", setHard, true);
     //document.getElementById("resetButton").addEventListener("click", resetGame, true);
+    document.onkeydown = keyDown;
 }
 
 //Sets handlers for new game buttons, initializes the canvas grid, and
 //sets up the game.
 window.onload = function(){
     setEventHandlers();
-
     initalizeHTMLGrid();
     resetGame();
-    document.onkeydown = keyDown;
 }
 function changeSquareValue(valueToChangeTo){
-	var canvasElement = document.getElementById(currentFocusElementId);
-	var context = canvasElement.getContext("2d");
-	var value = valueToChangeTo - 48;
-	var gridVal = grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
-	var editable = valuesEditable[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
-	var completedGame = false;
-	if(idsInput[currentFocusElementId] === undefined && editable){
-		idsInput[currentFocusElementId] = true;
-		numBoxesInputted++;
-		if((numBoxesInputted === EASY_DIFFICULTY && difficulty === 0) || (numBoxesInputted === MEDIUM_DIFFICULTY && difficulty === 1)
-			|| (numBoxesInputted === HARD_DIFFICULTY && difficulty === 2)){
-			completedGame = true;
-		}
-	}else if(editable && ((numBoxesInputted === 20 && difficulty === 0) || (numBoxesInputted === 35 && difficulty === 1)
-			|| (numBoxesInputted === 50 && difficulty === 2))){
-		completedGame = true;
-	}
-	if(value >= 1 && value <= 9 && editable){
-		context.fillStyle='#CCCCCC';
-                context.fillRect(0,0,28,28);
-		context.fillStyle = "#000000";
-		context.font = "20px Arial";
-		context.fillText(value,8,22);
+    var canvasElement = document.getElementById(currentFocusElementId);
+    var context = canvasElement.getContext("2d");
+    var value = valueToChangeTo - 48;
+    var gridVal = grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
+    var editable = valuesEditable[currentFocusElementJValue - 1][currentFocusElementIValue - 1];
+    var completedGame = false;
+    if(idsInput[currentFocusElementId] === undefined && editable){
+        idsInput[currentFocusElementId] = true;
+        numBoxesInputted++;
+        if((numBoxesInputted === EASY_DIFFICULTY && difficulty === 0) || (numBoxesInputted === MEDIUM_DIFFICULTY && difficulty === 1)
+                || (numBoxesInputted === HARD_DIFFICULTY && difficulty === 2)){
+                    completedGame = true;
+                }
+    }else if(editable && ((numBoxesInputted === EASY_DIFFICULTY && difficulty === 0) || (numBoxesInputted === MEDIUM_DIFFICULTY && difficulty === 1)
+                || (numBoxesInputted === HARD_DIFFICULTY && difficulty === 2))){
+                    completedGame = true;
+                }
+    if(value >= 1 && value <= 9 && editable){
+        context.fillStyle='#CCCCCC';
+        context.fillRect(0,0,28,28);
+        context.fillStyle = "#000000";
+        context.font = "20px Arial";
+        context.fillText(value,8,22);
 
-		gridRows[(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)][((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)] = value;
+        gridRows[(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)][((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)] = value;
 
-		gridColumns[((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)][(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)] = value;			
-		grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1] = value;
-	}
-	if(completedGame){
-		checkGameSuccess();
-	}
+        gridColumns[((currentFocusElementIValue - 1) % 3) + ((currentFocusElementJValue - 1) % 3 * 3)][(Math.floor((currentFocusElementJValue - 1) / 3) * 3) + Math.floor((currentFocusElementIValue - 1) / 3)] = value;			
+        grid[currentFocusElementJValue - 1][currentFocusElementIValue - 1] = value;
+    }
+    if(completedGame){
+        checkGameSuccess();
+    }
 }
 function keyDown(e){
-	if(currentFocusElementId === ""){
-		return;
-	}
-	changeSquareValue(e.keyCode);
+    if(currentFocusElementId === ""){
+        return;
+    }
+    changeSquareValue(e.keyCode);
 }
 
 function doMouseDown(event){
-	var canvasId = event.currentTarget.id;
-	currentFocusElementIValue = canvasId[canvasId.length - 1];
-	currentFocusElementJValue = canvasId[canvasId.length - 2];
-	var canvasObject = document.getElementById(canvasId);
-	if(canvasId !== currentFocusElementId && currentFocusElementId !== ""){
-		var previousCanvasObject = document.getElementById(currentFocusElementId);
-		previousCanvasObject.style.background = currentFocusElementBGColor;
-	}
-	currentFocusElementId = canvasId;
-	currentFocusElementBGColor = canvasObject.style.background;
-	canvasObject.style.background = "#FF0000";
+    var canvasId = event.currentTarget.id;
+    currentFocusElementIValue = canvasId[canvasId.length - 1];
+    currentFocusElementJValue = canvasId[canvasId.length - 2];
+    var canvasObject = document.getElementById(canvasId);
+    if(canvasId !== currentFocusElementId && currentFocusElementId !== ""){
+        var previousCanvasObject = document.getElementById(currentFocusElementId);
+        previousCanvasObject.style.background = currentFocusElementBGColor;
+    }
+    currentFocusElementId = canvasId;
+    currentFocusElementBGColor = canvasObject.style.background;
+    canvasObject.style.background = "#FF0000";
 }
 
 function initalizeHTMLGrid(){
@@ -144,7 +145,7 @@ function initalizeHTMLGrid(){
             c.setAttribute('width',30);
             c.setAttribute('height',30);
             c.className=i;
-	    c.addEventListener("mousedown", doMouseDown, false);
+            c.addEventListener("mousedown", doMouseDown, false);
             document.getElementById("box"+j).appendChild(c);
             var ctx=c.getContext('2d');								//Get the context - needed for HTML5 manipulation
             ctx.fillStyle='#FFFFFF';								//Make it blank to begin with
@@ -155,7 +156,7 @@ function initalizeHTMLGrid(){
 
 //function fills the global arrays of grid, gridRows and gridColumns
 function calculateGrid(){
-	var rerun=false;
+    var rerun=false;
     grid=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     valuesEditable=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
     gridRows=[new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array(), new Array()];
@@ -195,35 +196,35 @@ function calculateGrid(){
                 {
                     console.log("Rerunning calculation");
                     rerun=true;
-					break;
+                    break;
                 }
             }
-			if(!rerun){
-				var currentNum=currentSet[index];
-				if(currentNum==0){
-					j--;
-					continue;
-				}
-				currentSet[index]=0;
-				var squareIndexCol=j%3;
-				var squareIndexRow=i%3;
-				grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
-				valuesEditable[currentSquare-1][squareIndexRow*3+squareIndexCol]=false;
-				gridRows[i][j]=currentNum;
-				gridColumns[j][i]=currentNum;
-			}
-			else
-			{
-				break;
-			}
+            if(!rerun){
+                var currentNum=currentSet[index];
+                if(currentNum==0){
+                    j--;
+                    continue;
+                }
+                currentSet[index]=0;
+                var squareIndexCol=j%3;
+                var squareIndexRow=i%3;
+                grid[currentSquare-1][squareIndexRow*3+squareIndexCol]=currentNum;
+                valuesEditable[currentSquare-1][squareIndexRow*3+squareIndexCol]=false;
+                gridRows[i][j]=currentNum;
+                gridColumns[j][i]=currentNum;
+            }
+            else
+            {
+                break;
+            }
         }
-		if(rerun){
-			break;
-		}
+        if(rerun){
+            break;
+        }
     }
-	if(rerun){
-		calculateGrid();
-	}	
+    if(rerun){
+        calculateGrid();
+    }	
 }
 
 function styleGridElements(){
@@ -238,9 +239,9 @@ function styleGridElements(){
             ntx.fillStyle='#000000';
             ntx.font = "20px Arial";
             //Removed elements are store as 0s in the arrays. Do not write the 0s the screen.
-            c.style.background = "#FFA500";
+            //c.style.background = "#FFA500";
             if( currentElement != 0 ){
-		c.style.background = "#000000";
+                c.style.background = "#000000";
                 ntx.fillText(currentElement,8,22);
             }
             else{
@@ -251,36 +252,35 @@ function styleGridElements(){
     }
 }
 
-function addCheckAnswerButton(){
-   var btn = document.createElement("button");
-   btn.setAttribute('value', 'Recheck Answer');
-   btn.setAttribute('id', "recheck");
-   document.getElementById('id').addEventListener('click', checkGameSuccess, true);
+function checkGameSuccess(){
+    var currentSquare = 0;
+    for(var i = 0; i < 9; i++){
+        currentSquare=1+Math.floor(i/3)*3;
+        for(var j = 0; j < 9; j++){
+            currentSquare = 1 + Math.floor(j/3) + (Math.floor(i/3) * 3);
+            currentSquareIndex = (j % 3) + (3 * (i % 3))
+                var squareIndexCol=j%3;
+            var squareIndexRow=i%3;
+            if(checkRow(i, gridRows[i][j], j) && checkColumn(j, gridRows[i][j], i) 
+                    && checkSquare(currentSquare ,gridRows[i][j], currentSquareIndex)){
+                        continue;
+                    }else{
+                        alert("That is not the correct answer.");
+                        return;
+                    }
+        }
+    }
+    stopWatch.stop();
+    alert("WINNER\nTime: " + stopWatch.duration());
+    winningScreen();
 }
 
-function checkGameSuccess(){
-	var currentSquare = 0;
-	for(var i = 0; i < 9; i++){
-		currentSquare=1+Math.floor(i/3)*3;
-		for(var j = 0; j < 9; j++){
-			currentSquare = 1 + Math.floor(j/3) + (Math.floor(i/3) * 3);
-			currentSquareIndex = (j % 3) + (3 * (i % 3))
-			var squareIndexCol=j%3;
-			var squareIndexRow=i%3;
-			if(checkRow(i, gridRows[i][j], j) && checkColumn(j, gridRows[i][j], i) 
-				&& checkSquare(currentSquare ,gridRows[i][j], currentSquareIndex)){
-				continue;
-			}else{
-				alert("LOSER");
-                if( document.getElementById('recheck') == null ){
-                    addCheckAnswerButton();
-                }
-				return;
-			}
-		}
-	}
-    stopWatch.stop();
-	alert("WINNER\nTime: " + stopWatch.duration() + " time units");
+function winningScreen(){
+    var boxes = document.getElementsByTagName('canvas');
+    for( i = 0; i < boxes.length; i++ ){
+        boxes[i].setAttribute("animation", "myanim 3s");
+        //boxes[i].setAttribute("-webkit-animation","myanim 3s");
+    }
 }
 
 //check if there is a conflict in a 9x9 square not including a certain index
@@ -288,13 +288,13 @@ function checkSquare(currentSquare, currentSelectedNumber, indexOfValue){
     var afterIndex = grid[currentSquare-1].indexOf(currentSelectedNumber, indexOfValue + 1);
     var beforeIndex = grid[currentSquare-1].indexOf(currentSelectedNumber);
     if(beforeIndex > -1 && beforeIndex < indexOfValue){
-	return false;
+        return false;
     }else if(beforeIndex === indexOfValue){
-	if(afterIndex > -1){
-		return false;
-	}else{
-		return true;
-	}
+        if(afterIndex > -1){
+            return false;
+        }else{
+            return true;
+        }
     }
     return true;
 }
@@ -304,13 +304,13 @@ function checkRow(currentRow,currentSelectedNumber, indexOfValue){
     var afterIndex = gridRows[currentRow].indexOf(currentSelectedNumber, indexOfValue + 1);
     var beforeIndex = gridRows[currentRow].indexOf(currentSelectedNumber);
     if(beforeIndex > -1 && beforeIndex < indexOfValue){
-	return false;
+        return false;
     }else if(beforeIndex === indexOfValue){
-	if(afterIndex > -1){
-		return false;
-	}else{
-		return true;
-	}
+        if(afterIndex > -1){
+            return false;
+        }else{
+            return true;
+        }
     }
     return true;
 }
@@ -320,13 +320,13 @@ function checkColumn(currentColumn, currentSelectedNumber, indexOfValue){
     var afterIndex = gridColumns[currentColumn].indexOf(currentSelectedNumber, indexOfValue + 1);
     var beforeIndex = gridColumns[currentColumn].indexOf(currentSelectedNumber);
     if(beforeIndex > -1 && beforeIndex < indexOfValue){
-	return false;
+        return false;
     }else if(beforeIndex === indexOfValue){
-	if(afterIndex > -1){
-		return false;
-	}else{
-		return true;
-	}
+        if(afterIndex > -1){
+            return false;
+        }else{
+            return true;
+        }
     }
     return true;
 }
@@ -428,7 +428,7 @@ function removeNumbers(){
         var randomNumber2 = Math.floor(Math.random()*9);
         if( grid[randomNumber1][randomNumber2] != 0 ){
             grid[randomNumber1][randomNumber2] = 0;
-	    valuesEditable[randomNumber1][randomNumber2] = true;
+            valuesEditable[randomNumber1][randomNumber2] = true;
         }
         else{
             i--;
@@ -462,8 +462,11 @@ function StopWatch(){
     this.duration = function(){
         if(running == true)
             return;
-
-        return stopTime - startTime;
+        var time = stopTime - startTime;
+        var returnValue;
+        returnValue = " " + time/1000 + " seconds"; 
+       
+        return returnValue;
     }
 }
 
